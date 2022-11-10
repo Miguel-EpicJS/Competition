@@ -7,9 +7,9 @@ int search(vector<int> arr, int el) {
 
     int mid, low, high;
     low = 0;
-    high = arr.size();
+    high = arr.size() - 1;
 
-    while( low != high) {
+    while( high - low > 1) {
 	mid = (low+high)/2;
 	if(el == arr[mid]) {
 	    return mid;
