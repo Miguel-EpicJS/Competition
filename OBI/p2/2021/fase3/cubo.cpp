@@ -12,15 +12,28 @@ int main()
 
     int tot = 0;
 
-    for (int i = a; i <= b; i++)
-    {
-	int sq = (sqrt(i));
-	int cb = (cbrt(i));
+    int rc = int(pow(a, 1.0/3.0));
 
-	if ( sq*sq == i && cb * cb * cb == i )
+    int cb = rc * rc * rc;
+
+    if (cb < a)
+    {
+	rc++;
+	cb = rc*rc*rc;
+    }
+
+    while (cb <= b)
+    {
+	int sq = int(sqrt(cb));
+	int qd = sq * sq;
+
+	if ( qd == cb )
 	{
 	    tot++;
 	}
+
+	rc++;
+	cb = rc*rc*rc;
     }
 
     cout << tot;
