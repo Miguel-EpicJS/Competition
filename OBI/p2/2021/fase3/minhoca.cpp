@@ -59,6 +59,7 @@ int main()
     cout << maxD << "\n";
 
     int ciclo = 1;
+    int maxVal = maxD;
 
     for (int i = 1; i <= n; i++)
     {
