@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 
 using namespace std;
 
@@ -56,20 +57,74 @@ void printGraph()
     }
 }
 
+// DFS & BFS based on wikipedia pseudocode
+//
+
+bool visitedDFS[SIZE];
+
+void DFS(int v)
+{
+    visitedDFS[v] = true;
+    cout << v << ", ";
+    for (int i = 0; i < SIZE; i++)
+    {
+	if (graph[v][i] == 1 && !visitedDFS[i])
+	{
+	    DFS(i);
+	}
+    }
+}
+
+bool visitedBFS[SIZE];
+
+void BFS(int v)
+{
+    queue<int> Q; 
+    Q.push(v);
+
+    visitedBFS[v] = true;
+    
+    while(!Q.empty())
+    {
+	v = Q.front();
+	Q.pop();
+
+	cout << v << ", ";
+	
+	for (int i = 0; i < SIZE; i++)
+	{
+	    if (graph[v][i] != 0 && !visitedBFS[i])
+	    {
+		visitedBFS[i] = true;
+		Q.push(i);
+	    }
+	}
+    }
+}
+
+
 int main()
 {
     startGraph();
 
-    addEdge(0, 1, true);
     addEdge(1, 2, true);
-    addEdge(1, 5, true);
-    addEdge(2, 5, true);
+    addEdge(1, 4, true);
+    addEdge(1, 7, true);
     addEdge(2, 3, true);
-    addEdge(3, 4, true);
     addEdge(4, 5, true);
     addEdge(4, 6, true);
+    addEdge(7, 8, true);
+    addEdge(0, 1, true);
     
     printGraph();
+
+    cout << "\n\n";
+
+    DFS(0);
+
+    cout << "\n\n";
+    
+    BFS(0);
 
     return 0;
 }
