@@ -5,6 +5,12 @@ using namespace std;
 
 #define SIZE 10
 
+struct node
+{
+    node link;
+    int data;
+}
+
 int graph[SIZE][SIZE];
 
 void startGraph()
