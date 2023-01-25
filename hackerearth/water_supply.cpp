@@ -1,29 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
-
-int result = 0;
-
-int dfs(vector<vector<int>> &matrix, vector<int> block, int source)
-{
-    block[source] = 1;
-
-    result++;
-
-    for ( auto child : matrix[source] ) {
-
-	if (block[child] == 1)
-	{
-	    continue;
-	}
-
-	dfs(matrix, block, child);
-    }
-
-    return result;
-}
 
 int main()
 {
@@ -42,23 +20,31 @@ int main()
 	matrix[y].push_back(x);
     }
 
-    vector<int> blocked(n+1);
+    vector<int> blocked(n);
+    int result = 1;
 
-    blocked[0] = 1;
-    
-    vector<int> results;
+    int maxResult = 0;
+
+    int oneCount = 0;
 
     for (int i = 0; i < n; i++)
     {
-	cin >> blocked[i+1];
+	cin >> blocked[i];
+	if (blocked[i] == 1)
+	{
+	    result = 1;
+	    oneCount ++;
+	}
+	else
+	{
+	    result += 1;
+	}
+	if (result > maxResult)
+	    maxResult = result;
     }
-    for (int i = 0; i < n; i++)
-    {
-	result = 0;
-	results.push_back(dfs(matrix, blocked, i+1));
-    }
 
-
-    cout << *max_element(results.begin(), results.end()) ;
-
+    if (oneCount == n)
+	cout << 2;
+    else
+	cout << maxResult+1;
 }
