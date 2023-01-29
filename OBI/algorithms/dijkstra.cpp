@@ -1,114 +1,79 @@
 #include <iostream>
+
 #include <queue>
+#include <vector>
+#include <utility>
 
 using namespace std;
 
+const int INF = 0xf3f3f3;
+const int null = -127;
 
-using namespace std;
+const int V = 6;
 
-#define SIZE 10
-
-int graph[SIZE][SIZE];
-
-void startGraph()
+void dijkstra(int graph[V][V], int source)
 {
-    for (int i = 0; i < SIZE; i++)
+    int dist[V], prev[V];
+
+    dist[source] = 0;
+
+    priority_queue<pair<int, int>> Q;
+
+    for (int vertex = 0; vertex < V; vertex++)
     {
-	for (int j = 0; j < SIZE; j++)
+	if (vertex != source)
 	{
-	    graph[i][j] = 0;
+	    dist[vertex] = INF;
+	    prev[vertex] = null;
 	}
-    }
-}
 
-void addEdge(int i, int j, int w, bool bi)
-{
-    if (i >= SIZE || j >= SIZE)
-    {
-	cout << "UPDATE SIZE\n";
-	return;
+	Q.push(make_pair(-1 * dist[vertex], vertex));
     }
 
-    graph[i][j] = w;
-    if (bi)
-	graph[j][i] = w; 
-
-}
-
-void printGraph()
-{
-    cout << "   ";
-    for (int i = 0; i < SIZE; i++)
-	cout << i << " ";
-
-    cout << "\n";
-
-    for (int i = 0; i <= SIZE; i++)
-	cout << "__";
-
-    cout << "\n";
-
-
-    for (int i = 0; i < SIZE; i++)
+    while (!Q.empty())
     {
-	cout << i << "| ";
-	for (int j = 0; j < SIZE; j++)
-	{
-	    cout << graph[i][j] << " ";
-	}
-	cout << "\n";
-    }
-}
-
-bool visitedBFS[SIZE];
-
-void dijkstra(int v)
-{
-    priority_queue<int> Q; 
-    Q.push(v);
-
-    visitedBFS[v] = true;
-    
-    while(!Q.empty())
-    {
-	v = -1 * Q.top();
+	pair<int, int> u = Q.top();
 	Q.pop();
 
-	cout << v << ", ";
-	
-	for (int i = 0; i < SIZE; i++)
+	for( int neighbor = 0; neighbor < V; neighbor++ )
 	{
-	    if (graph[v][i] != 0 && !visitedBFS[i])
+    
+	    if (graph[u.second][neighbor] == -1)
+		continue;
+
+	    int alt = dist[u.second] + graph[u.second][neighbor];
+
+	    if (alt < dist[neighbor])
 	    {
-		visitedBFS[i] = true;
-		Q.push(i * -1);
+		dist[neighbor] = alt;
+		prev[neighbor] = u.second;
+		Q.push(make_pair(alt, neighbor));
 	    }
 	}
-    }
-}
 
+    }
+
+    for(int i = 0; i < V; i++)
+    {
+	cout << dist[i] << ", ";
+    }
+
+}
 
 int main()
 {
     
-    startGraph();
+    int graph[V][V] = {
+      // 1  2  3  4  5    6
+	{0, 2, 4, 8, 16, -1}, // 1
+	{2, 0, -1, -1, -1, -1}, // 2
+	{4, -1, 0, -1, -1, 32}, // 3
+	{8, -1, -1, 0, -1, -1}, // 4
+	{16, -1, -1, -1, 0, -1}, // 5
+	{-1, -1, 32, -1, -1, 0}, // 6
+    };
 
-    addEdge(1, 2, 1*2, true);
-    addEdge(1, 4, 2*2, true);
-    addEdge(1, 7, 3*2, true);
-    addEdge(2, 3, 4*2, true);
-    addEdge(4, 5, 5*2, true);
-    addEdge(4, 6, 6*2, true);
-    addEdge(7, 8, 7*2, true);
-    addEdge(0, 1, 8*2, true);
-    
-    printGraph();
+    dijkstra(graph, 0);
 
-    cout << "\n\n";
-    
-    dijkstra(0);
-
-    return 0;
-
+    return 0;                           
 }
-
