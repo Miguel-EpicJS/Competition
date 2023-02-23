@@ -1,52 +1,49 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-int main()
-{
-
+int main() {
     int n, m;
-
     cin >> n >> m;
 
-    long long arr[n][m];
-    
-    int maxArr[m];
-    int maxCount[n];
-    int avg[n];
+    vector<int> max_price(m, 0);
+    vector<int> good_count(m, 0);
 
-    vector<tuple<int, int, int>> res;
-
-    memset(maxArr, 0, sizeof(maxArr));
-    memset(maxCount, 0, sizeof(maxCount));
-    memset(avg, 0, sizeof(avg));
-
-    for (int i = 0; i < n; i++)
-    {
-	for (int j = 0; j < m; j++)
-	{
-	    cin >> arr[i][j];
-	    avg[i] += arr[i][j];
-	    maxArr[j] = max(maxArr[j], (int)arr[i][j]);
-	}
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            int price;
+            cin >> price;
+            if (price > max_price[j]) {
+                max_price[j] = price;
+                good_count[j] = 1;
+            } else if (price == max_price[j]) {
+                good_count[j]++;
+            }
+        }
     }
 
-    for (int i = 0; i < n; i++)
-    {
-	for (int j = 0; j < m; j++)
-	{
-	    if (arr[i][j] == maxArr[j])
-	    {
-		maxCount[i]++;
-	    }
-	}
-	res.push_back(make_tuple(maxCount[i], avg[i], i+1));
+    int max_good_count = *max_element(good_count.begin(), good_count.end());
+    vector<int> best_items;
+    for (int i = 0; i < m; i++) {
+        if (good_count[i] == max_good_count) {
+            best_items.push_back(i);
+        }
     }
 
-    sort(res.begin(), res.end());
-
-    cout << get<2>(res[res.size()-1]);
+    if (best_items.size() == 1) {
+        cout << best_items[0] + 1 << endl;
+    } else {
+        int best_item = best_items[0];
+        double best_average = (double)max_price[best_item] / max_good_count;
+        for (int i = 1; i < best_items.size(); i++) {
+            int item = best_items[i];
+            double average = (double)max_price[item] / max_good_count;
+            if (average > best_average) {
+                best_item = item;
+                best_average = average;
+            }
+        }
+        cout << best_item + 1 << endl;
+    }
 
     return 0;
 }
-
