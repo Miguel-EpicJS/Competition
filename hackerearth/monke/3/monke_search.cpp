@@ -31,14 +31,12 @@ int main()
 
         if (x == 0)
         {
-            int i;
-            for (i = 0; i < n && a[i] < y; i++){}
+            int i = lower_bound(a, a+n, y) - a;
             cout << n-i << "\n";
         }
         else
         {
-            int i;
-            for (i = 0; i < n && a[i] <= y; i++){}
+            int i = upper_bound(a, a+n, y) - a;
             cout << n-i << "\n";    
         }
     }
