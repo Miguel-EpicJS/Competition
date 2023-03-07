@@ -1,37 +1,44 @@
-#include <bits/stdc++.h>
-
+#include <iostream>
+#include <vector>
 using namespace std;
 
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
-    long long n, x;
-
-    cin >> n >> x;
-
-    long long a[n];
-
-    long long tot = 0;
-
-    for (long long i = 0; i < n; i++)
-    {
-	cin >> a[i];
-	tot += a[i];
+bool checkSubarrays(vector<int> A, int K, int X) {
+    // Check if there exists a subarray of size K with a sum greater than X.
+    int prefix_sum = 0;
+    for (int i = 0; i < K; i++) {
+        prefix_sum += A[i];
     }
-    sort(a, a+n);
-    int r = n;
-
-    for (long long i = 0; i < n && tot > x; i++)
-    {
-	tot -= a[i];
-	r--;
+    if (prefix_sum > X) {
+        return true;
     }
-
-    cout << r << "\n";
-
-    return 0;
+    for (int i = K; i < A.size(); i++) {
+        prefix_sum += A[i] - A[i-K];
+        if (prefix_sum > X) {
+            return true;
+        }
+    }
+    return false;
 }
 
+int findMaxSpecialInteger(vector<int> A, int X) {
+    // Find the maximum value of special integer K for array A and threshold X.
+    int lo = 1, hi = A.size();
+    while (lo < hi) {
+        int mid = (lo + hi + 1) / 2;
+        if (checkSubarrays(A, mid, X)) {
+            lo = mid;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return lo;
+}
+
+int main() {
+    // Example usage:
+    vector<int> A = {1, 2, 3, 4};
+    int X = 6;
+    int maxK = findMaxSpecialInteger(A, X);
+    cout << "Maximum special integer K: " << maxK << endl;
+    return 0;
+}
