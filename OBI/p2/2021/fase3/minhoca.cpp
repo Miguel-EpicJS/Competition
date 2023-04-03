@@ -1,32 +1,31 @@
-#include <iostream>
-#include <vector>
-#include <map>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int maxD = -1, maxNode = -1;
+int mDepth = -1;
+int mdNode = 0;
 
-map<int, bool> visited;
+vector<int> g[50001];
+vector<bool> vis(50001);
+vector<int>  d(50001);
 
-void dfs(int node, vector<vector<int>> graph, int dis)
+void dfs(int src, int depth)
 {
-
-    visited[node] = true;
-
-    if (dis > maxD)
+    vis[src] = true;
+    d[src] = depth;
+    if (depth >= mDepth)
     {
-	maxNode = node;
-	maxD = dis;
+	mDepth = depth;
+	mdNode = src;
     }
 
-    for (auto x : graph[node])
+    for (auto e : g[src])
     {
-	if (visited[x] == 0)
+	if (!vis[e])
 	{
-	    dfs(x, graph, dis+1);
+	    dfs(e, depth+1);
 	}
     }
-
 }
 
 int main()
@@ -35,41 +34,45 @@ int main()
 
     cin >> n;
 
-    vector<vector<int>> graph(n+1);
-
     for (int i = 0; i < n-1; i++)
     {
 	int x, y;
 	cin >> x >> y;
 
-	graph[x].push_back(y);
-	graph[y].push_back(x);
+	g[x].push_back(y);
+	g[y].push_back(x);
+
     }
 
-    dfs(1, graph, 1);
-    maxD = -1;
+    dfs(1, 0);
+    vis.assign(n+2, false);
+    dfs(mdNode, 0);
 
+    cout << mDepth + 1 << "\n";
+
+    int n1 = 0;
     for (int i = 1; i <= n; i++)
     {
-	visited[i] = false;
-    }
-
-    dfs(maxNode, graph, 1);
-
-    cout << maxD << "\n";
-
-    int ciclo = 1;
-    int maxVal = maxD;
-
-    for (int i = 1; i <= n; i++)
-    {
-	if (graph[i].size() - 1 > 0)
+	if (d[i] == mDepth)
 	{
-	    ciclo *= graph[i].size() - 1;
+	    n1++;
+	}
+    }
+    vis.assign(n+2, false);
+    mDepth = 0;
+    dfs(mdNode, 0);
+
+    int n2 = 0;
+    for (int i = 1; i <= n; i++)
+    {
+	if (d[i] == mDepth)
+	{
+	    n2++;
 	}
     }
 
-    cout << ciclo << "\n";
+    cout << n1*n2 << "\n";
+ 
 
     return 0;
 }
