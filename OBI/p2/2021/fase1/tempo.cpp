@@ -12,68 +12,47 @@ int main()
 
     cin >> n;
 
-    char v;
-    int c;
-
-    map<int, int> m;
-    set<int> r;
-    set<int> exist;
-
-    int arr[101][21];
-
-    for (int i = 0; i <= 100; i++)
-    {
-	m[c] = 0;
-    }
+    map<int, int> friends, counter;
 
     for (int i = 0; i < n; i++)
     {
-	cin >> v >> c;
+	char x;
+	int y;
+	cin >> x >> y;
 
-	int temp = 1;
+	int t = 1;
 
-	if (v == 'R'){
-	    m[c]++;
-	    exist.insert(c);
-	}
-	else if (v == 'E')
+	if (x == 'T')
 	{
-	    m[c]--;
-	    exist.insert(c);
+	    t = y-1;
+	}
+	else if (x == 'R')
+	{
+	    if (friends.find(y) == friends.end())
+	    {
+		friends[y] = 0;
+		counter[y] = 0;
+	    }
+	    friends[y]++;
 	}
 	else
 	{
-	    temp = c;
+	    friends[y]--;
 	}
-	
-	for (int j = 0; j < 101; j++)
+
+	for (auto &i : counter)
 	{
-	    if (m.find(j) == m.end() || m[j] <= 0 )
-	    {
-		arr[j][i] = 0;
-		continue;
-	    }
-	    arr[j][i] = temp;
+	    if (friends[i.first] > 0)
+		i.second += t;
 	}
     }
 
-    for (auto i : exist)
+    for (auto &i : counter)
     {
-	if (m[i] != 0)
-	{
-	    cout << i << " -1\n";
-	}
-	else if (m.find(i) != m.end())
-	{
-	    int s = accumulate(arr[i], arr[i] + 21, 0);
-	    cout << i << " " << s << "\n";
-	    cout << "\n\n";
-	    for (auto j : arr[i])
-	    {
-		cout << j << " ";
-	    }
-	    cout << "\n\n";
-	}
+	if (friends[i.first] == 0)
+	    cout << i.first << " " << i.second <<  "\n";
+	else
+	    cout << i.first << " -1\n";
     }
 
     return 0;
