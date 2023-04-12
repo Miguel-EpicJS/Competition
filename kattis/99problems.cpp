@@ -14,33 +14,37 @@ int main()
     }
     else if (n < 1000)
     {
-	if (n % 100 == 49)
-	{
-	    cout << (n ) + 50;
-	}
-	else if (n % 100 > 49)
-	{
-	    cout << n + (99 - n % 100);
-	}
-	else
-	{
-	    cout << n + (99 - n % 100) - 100;
-	}
+    if (n % 100 == 49)
+    {
+        cout << (n) + 50;
+    }
+    else if (n % 100 > 49)
+    {
+        cout << n + (99 - n % 100);
+    }
+    else
+    {
+        cout << n + (99 - n % 100) - 100;
+    }
     }
     else if (n < 10000)
     {
-	if (n % 100 == 99)
-	{
-	    cout << n;
-	}
-	else if (n % 100 > 49)
-	{
-	    cout << n + (99 - n % 100);
-	}
-	else
-	{
-	    cout << n + (99 - n % 100) - 100;
-	}
+    if (n % 100 == 99)
+    {
+        cout << n;
+    }
+    else if (n % 100 == 49)
+    {
+        cout << n+50;
+    }
+    else if (n % 100 > 49)
+    {
+        cout << n + (99 - n % 100);
+    }
+    else
+    {
+        cout << n + (99 - n % 100) - 100;
+    }
 
     }
     else
