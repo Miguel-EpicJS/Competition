@@ -1,41 +1,29 @@
-#include <cstdio>
 #include <algorithm>
+#include <cstdio>
 #include <vector>
 #include <iostream>
 
 using namespace std;
 
-int main()
-{
-    freopen("shell.in", "r", stdin);
+int main() {
+	freopen("shell.in", "r", stdin);
 
-    int n;
+	int n;
 
-    cin >> n;
+	cin >> n;
 
-    vector<int> arr = {0, 1, 2};
+	vector<int> shell = {0, 1, 2};
 
-    int ans[3] = {0, 0, 0};
+	vector<int> counter(3);
+	for (int i = 0; i < n; i++) {
+		int a, b, g;
+		cin >> a >> b >> g;
+		a--, b--, g--;
 
-    for (int i = 0; i < n; i++)
-    {
-	int x, y, z;
-	cin >> x >> y >> z;
-    
-	x--;
-	y--;
-	z--;
-    
-	swap(arr[x], arr[y]);
-	
-	ans[arr[i]]++;
+		swap(shell[a], shell[b]);
+		counter[shell[g]]++;
+	}
 
-    }
-
-
-    freopen("shell.out", "w", stdout);
-
-    cout << *max_element(ans, ans+3);
-    return 0;
+	freopen("shell.out", "w", stdout);
+	cout << max({counter[0], counter[1], counter[2]}) << "\n";
 }
-
