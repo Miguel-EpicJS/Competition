@@ -2,29 +2,29 @@
 
 using namespace std;
 
+char arr[505][505];
+
 int n, m;
-char v;
-
-char a[501][501];
-
 void dfs(int x, int y)
 {
-    if (x < 0 || x >= n || y < 0 || y >= n)
+
+    if (arr[x][y] == '*')
     {
 	return;
     }
 
-    if (a[x][y] == '*' || a[x][y] > v)
+    if (arr[x][y] - '0' > m)
     {
 	return;
     }
 
-    a[x][y] = '*';
+    arr[x][y] = '*';
 
     dfs(x+1, y);
-    dfs(x, y+1);
     dfs(x-1, y);
+    dfs(x, y+1);
     dfs(x, y-1);
+
 }
 
 int main()
@@ -33,30 +33,37 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
+
     cin >> n >> m;
 
-    v = '0' + m;
-    
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < 505; i++)
     {
-	for (int j = 0; j < n; j++)
+	for (int j = 0;j < 505; j++)
 	{
-	    cin >> a[i][j];
+	    arr[i][j] = '*';
 	}
     }
 
-    dfs(0, 0);
+    for (int i = 0; i < n; i++)
+    {
+	for (int j = 0; j < n; j++)
+	{
+	    cin >> arr[i+2][j+2];
+	}
+    }
+
+
+    dfs(2, 2);
+
 
     for (int i = 0; i < n; i++)
     {
 	for (int j = 0; j < n; j++)
 	{
-	    cout << a[i][j];
+	    cout << arr[i+2][j+2];
 	}
 	cout << "\n";
     }
-
-
 
     return 0;
 }

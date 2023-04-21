@@ -12,29 +12,28 @@ int main()
 
     cin >> n;
 
-    int a[3];
-    a[1] = 0;
-    a[2] = 0;
+    int t[3] = {0, 0, 0};
 
     for (int i = 0; i < n; i++)
     {
 	int x;
 	cin >> x;
-	a[x]++;
+	
+	t[x]++;
     }
 
-    int b, c;
+    int z, w;
 
-    cin >> b >> c;
+    cin >> z >> w;
 
-    char r = 'S';
+    string r = "S\n";
 
-    if (a[1] < b || a[2] < c)
+    if (z < t[1] || w < t[2])
     {
-	r = 'N';
+	r = "N\n";
     }
 
-    cout << r << "\n";
+    cout << r;
 
     return 0;
 }
