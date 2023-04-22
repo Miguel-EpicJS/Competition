@@ -2,61 +2,66 @@
 
 using namespace std;
 
+vector<int> tree;
 
-int n, m;
-
-vector<int> bit, pessoas;
-
-void add(int i, int v)
+void update(int i, int val)
 {
-    int ix = i;
-    while (ix <= n)
+    while (i < tree.size())
     {
-	bit[ix] += v;
-	ix += ix&-ix;
+	tree[i] += val;
+	i += i & -i;
     }
 }
 
-int sum(int i)
+int prefix_sum(int i)
 {
-    int ix = i;
-    int s = 0;
-    while (ix > 0)
+    int res = 0;
+    while (i > 0)
     {
-	s += bit[ix];
-	ix -= ix&-ix;
+	res += tree[i];
+	i -= i & -i;
     }
-    return s;
+    return res;
 }
 
 int main()
 {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    int n, m;
+
     cin >> n >> m;
 
-    bit.assign(n+1, 0);
+    tree.resize(n+1);
 
-    
+    vector<int> arr;
 
-    for (int i = 0; i < n; i++)
+    for (int i = 1; i <= n; i++)
     {
 	int x;
 	cin >> x;
-	pessoas.push_back(x);
-	add(i+1, x);
+	arr.push_back(x);
+	update(i, x);
     }
 
-    for (int i = 0; i < m; i++)
+    while (m--)
     {
 	int x, y;
 	cin >> x >> y;
 	if (x == 0)
 	{
-	    int z;
-	    cin >> z;
-	    add(y, z - (sum(y) - sum(y-1)));
+	    int w;
+	    cin >> w;
+	    int diff = w - arr[y-1];
+	    arr[y-1] = w;
+	    update(y, diff);
 	}
 	else
-	    cout << sum(y) << "\n";
+	{
+	    cout << prefix_sum(y) << "\n";
+	}
     }
 
     return 0;
