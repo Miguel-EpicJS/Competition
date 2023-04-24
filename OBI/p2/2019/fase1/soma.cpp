@@ -7,38 +7,21 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
+    
+    int n, m;
 
-    int n, k;
+    cin >> n >> m;
 
-    cin >> n >> k;
-
-    vector<int> a(n);
-
-    for (int i = 0; i < n; i++)
+    vector<int> arr(n+1);
+    arr[0] = 0;
+    for (int i = 1; i <= n; i++)
     {
-	cin >> a[i];
+	cin >> arr[i];
+
+	arr[i] += arr[i-1];
     }
 
-    int t = 0;
 
-    for (int i = 0; i < n; i++)
-    {
-	int s = 0;
-	for (int j = i; j < n; j++)
-	{
-	    s += a[j];
-	    if (s == k)
-	    {
-		t++;
-	    }
-	    if (s > k)
-	    {
-		break;
-	    }
-	}
-    }
-
-    cout << t << "\n";
 
     return 0;
 }
