@@ -8,21 +8,32 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int n, m;
+    int n, k;
 
-    cin >> n >> m;
+    cin >> n >> k;
 
-    vector<int> arr(n+1);
-    arr[0] = 0;
-    for (int i = 1; i <= n; i++)
+    vector<int> arr(n);
+    
+    long long count = 0;
+    unordered_map<long long, int> prefix_sum;
+    prefix_sum[0] = 1;
+    long long cur = 0;
+    for (int i = 0; i < n; i++)
     {
 	cin >> arr[i];
+	cur += arr[i];
 
-	arr[i] += arr[i-1];
+	prefix_sum[cur-k] += 0;
+
+	count += prefix_sum[cur - k];
+
+	prefix_sum[cur]++;
+
     }
+    
 
 
-
+    cout << count << "\n";
     return 0;
 }
 
