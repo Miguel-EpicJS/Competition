@@ -1,43 +1,43 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int longest_alternating_subsequence(vector<int>& nums) {
-    int n = nums.size();
-    if (n < 2) {
-        return n;
+int solve(vector<int> &arr, int i, int p1, int p2, vector<int> &dp)
+{
+    if (i >= arr.size()) return 0;
+    //if (dp[i] != 0) return dp[i];
+
+    int dont = solve(arr, i+1, p1, p2, dp);
+    int take = 0;
+
+    if (p1 == -1 || (arr[i] == p1 && arr[i] != p2))
+    {
+	take = 1 + solve(arr, i+1, p2, arr[i], dp);
     }
-    
-    int ans = 1;
-    int last1 = nums[0], last2 = nums[0], len = 1;
-    
-    for (int i = 1; i < n; i++) {
-        if (nums[i] != last1 && nums[i] != last2) {
-            len++;
-            ans = max(ans, len);
-            last2 = last1;
-            last1 = nums[i];
-        } else {
-            len = 1;
-            if (nums[i] == last1) {
-                last2 = last1;
-            }
-            last1 = nums[i];
-        }
-    }
-    
-    return ans;
+
+    dp[i] = max(take, dont);
+
+    return dp[i];
 }
 
 int main() {
     vector<int> arr;
     int n;
     cin >> n;
+
+    vector<int> dp(n, 0);
+
     for (int i = 0; i < n; i++)
     {
 	int x;
 	cin >> x;
 	arr.push_back(x);
     }
-    cout << longest_alternating_subsequence(arr); 
+    if (n <= 2)
+    {
+	cout << n;
+	return 0;
+    }
+    cout << solve(arr, 0, -1, -1, dp) << "\n"; 
+
     return 0;
 }
