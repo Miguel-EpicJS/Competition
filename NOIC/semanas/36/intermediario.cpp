@@ -2,88 +2,53 @@
 
 using namespace std;
 
-char grid[3002][3002];
 
+long long orbes[3010][3010];
+long long ingots[3010][3010];
+char grid[3010][3010];
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
-    int h, w;
+    long long h, w;
 
     cin >> h >> w;
 
-    vector<pair<int, int>> joia;
-    map<int, vector<int>> orbe;
-    map<int, vector<int>> ingo;
 
-    for (int i = 1; i <= h; i++)
+    for (long long i = 0; i < h; i++)
     {
-	for (int j = 1; j <= w; j++)
+	for (long long j = 0; j < w; j++)
 	{
-	    char x;
-	    cin >> x;
-	    if (x == 'J') 
+	    cin >> grid[i][j];
+	}
+    }
+
+    for (long long i = 0; i < h; i++)
+    {
+	for (long long j = w; j >= 0; j--)
+	{
+	    orbes[i][j] = orbes[i][j+1] + (grid[i][j] == 'O');
+	}
+    }
+
+    for (long long j = 0; j < w; j++)
+    {
+	for (long long i = h; i >= 0; i--)
+	{
+	    ingots[i][j] = ingots[i+1][j] + (grid[i][j] == 'I');
+	}
+    }
+
+    long long ans = 0;
+    for (long long i = 0; i < h; i++)
+    {
+	for (long long j = 0; j < w; j++)
+	{
+	    if (grid[i][j] == 'J')
 	    {
-		joia.push_back({i, j});
-	    }
-	    if (x == 'O') 
-	    {
-		if (orbe.find(i) == orbe.end())
-		{
-		    vector<int> k;
-		    orbe[i] = k;
-		}
-		orbe[i].push_back(j);
-	    }
-	    if (x == 'I')
-	    {
-		if (ingo.find(j) == orbe.end())
-		{
-		    vector<int> k;
-		    ingo[j] = k;
-		}
-		ingo[j].push_back(i);
+		ans += ingots[i][j] * orbes[i][j];
 	    }
 	}
     }
 
-    int ans = 0;
-    int a= 0, b= 0;
-
-    for (auto k : joia)
-    {
-	a = 0;
-	b = 0;
-	
-	cout << "( " << k.first << " , " << k.second << " )\n";
-	cout << "l: ";
-	
-	for (auto o : orbe[k.first])
-	{
-	   cout << o << " ";
-	   if (k.second < o) a++;
-        }
-	
-	cout << "\n";
-	cout << "k: ";
-	
-	for (auto i : ingo[k.second])
-	{
-	    cout << i << " ";
-	    if (k.first < i) b++;
-	}
-	if (ingo[k.second].size() == 0 || orbe[k.first].size() == 0)
-	{
-	    a = 0;
-	    b = 0;
-	}
-	
-	cout << "\n";
-	cout << a << ", " << b << "\n";
-	ans += a*b;
-    }
 
     cout << ans;
 
