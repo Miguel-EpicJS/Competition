@@ -40,12 +40,15 @@ int main()
 
 	reverse(l.begin(), l.end());
 
-	int i = 1;
-
-	while (l[i-1] == r[i-1])
+	int k = 0;
+	while (l[k] == r[k])
 	{
-
+	    k++;
 	}
+	
+	tot = (abs((l[k] - '0') - (r[k] - '0'))) + 9 *(n-k-1);
+
+	cout << tot << "\n";
 
     }
 

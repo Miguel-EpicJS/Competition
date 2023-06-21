@@ -1,39 +1,27 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+const int maxn = 5e5 + 10;
+int n, k;
+int v[maxn], pref[maxn];
 
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    
-    int n, k;
+int main() {
+	ios::sync_with_stdio(false), cin.tie(0); // OTIMIZAÇÃO CIN E COUT
+	cin >> n >> k;
+	for (int i = 1; i <= n; i++) {
+		cin >> v[i];
+	}
 
-    cin >> n >> k;
+	pref[1] = v[1]; // Inicializando o primeiro prefixo
+	for (int i = 2; i <= n; i++) {
+		pref[i] = pref[i-1] + v[i];
+	}
 
-    vector<int> arr(n);
-    
-    long long count = 0;
-    unordered_map<long long, int> prefix_sum;
-    prefix_sum[0] = 1;
-    long long cur = 0;
-    for (int i = 0; i < n; i++)
-    {
-	cin >> arr[i];
-	cur += arr[i];
-
-	prefix_sum[cur-k] += 0;
-
-	count += prefix_sum[cur - k];
-
-	prefix_sum[cur]++;
-
-    }
-    
-
-
-    cout << count << "\n";
-    return 0;
+	long long ans = 0; // LONG LONG
+	for (int i = 1; i <= n; i++) {
+		int resp = upper_bound(pref+i, pref+n+1, pref[i-1] + k) - lower_bound(pref+i, pref+n+1, pref[i-1] + k);
+		ans += resp;
+	}
+	cout << ans << "\n";
+	return 0;
 }
-

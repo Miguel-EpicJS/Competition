@@ -14,20 +14,16 @@ int main()
 
     while (t--)
     {
-	int n;
+	int a, b, c;
+	long long k;
 
-	cin >> n;
-	
-	vector<int> arr(n);
+	cin >> a >> b >> c >> k;
 
-	for (int i = 0; i < n; i++)
+	if(c > max(a, b)+1)
 	{
-	    cin >> arr[i];
+	    cout << "-1\n";
 	}
-
-
     }
-
     return 0;
 }
 

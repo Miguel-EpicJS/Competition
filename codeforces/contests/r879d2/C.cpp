@@ -19,9 +19,6 @@ int main()
 
 	cin >> n >> l >> r;
 
-	string k = l;
-
-	reverse(k.begin(), k.end());
 
 	int diff = 0;
 	int diffR = 0;
@@ -30,18 +27,24 @@ int main()
 	{
 	    if (l[i] != r[i])
 		diff++;
-	    if (l[i] != k[i])
+	    if (l[i] != r[n-i-1])
 		diffR++;
 	}
 
-	if(diff <= 1)
+	if (diff == 0)
 	{
-	    cout << diff << "\n";
+	    cout << "0\n";
+	    continue;
 	}
-	else if (diffR <= 1)
+	if (diffR == 0)
 	{
-	    cout << "1\n";
+	    cout << "2\n";
+	    continue;
 	}
+
+	int tot = min((2*diff - (diff%2)), (2*diffR - (1 - (diffR % 2))));
+	cout << tot << "\n";
+
     }
 
     return 0;
