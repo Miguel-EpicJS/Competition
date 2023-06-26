@@ -19,13 +19,13 @@ long long solve(int n, int i, int i1, int i2, vector<int>& fish)
     {
 	doit -= fish[i];
     }
-    if (i+1 < n)
-    {
-	doit += fish[i+1];
-    }
     if (i > 0 && !i2 && !i1)
     {
 	doit += fish[i-1];
+    }
+    if (i+1 < n)
+    {
+	doit += fish[i+1];
     }
 
     dont += solve(n, i+1, 0, i1, fish);
