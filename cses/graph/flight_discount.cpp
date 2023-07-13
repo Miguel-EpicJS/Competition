@@ -1,97 +1,57 @@
 #include <bits/stdc++.h>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::vector;
 
-vector<pair<int, int>> graph[100010];
-
-long long dist[100010];
-int pre[100010];
-bool vis[100010];
-
-int n, m;
-
-void dijkstra()
-{
-    for (int i = 0; i <= n; i++)
-    {
-	dist[i] = 999999999999999LL;
-	pre[i] = 0;
-    }
-
-    dist[1] = 0;
-    dist[0] = 0;
-    priority_queue<pair<int, int>> q;
-
-    q.push({0, 1});
-
-    while(!q.empty())
-    {
-	int u = q.top().second;
-	q.pop();
-
-	if (vis[u]) continue;
-
-	vis[u] = true;
-
-	for (auto i : graph[u])
-	{
-	    int v = i.first;
-	    long long w = i.second;
-
-	    long long alt = dist[u] + w;
-
-	    if (alt < dist[i.first])
-	    {
-		dist[v] = alt;
-		pre[v] = u;
-		q.push({-dist[v], v});
-	    }
+int main() {
+	int city_num;
+	int flight_num;
+	std::cin >> city_num >> flight_num;
+	vector<vector<std::pair<int, int>>> neighbors(city_num);
+	for (int f = 0; f < flight_num; f++) {
+		int from;
+		int to;
+		int cost;
+		std::cin >> from >> to >> cost;
+		neighbors[--from].push_back({--to, cost});
 	}
-    }
 
-    vector<int> sis;
+	vector<vector<long long>> min_cost(city_num, {INT64_MAX, INT64_MAX});
+	min_cost[0] = {0, 0};
 
-    int current = n;
+	struct Pos {
+		int pos;         // the current position
+		bool used;       // whether we've used up our discount yet
+		long long cost;  // the cost associated with this state
+	};
+	auto cmp = [&](const Pos &a, const Pos &b) { return a.cost > b.cost; };
+	std::priority_queue<Pos, vector<Pos>, decltype(cmp)> frontier(cmp);
+	frontier.push({0, false, 0});
 
-    while(current != 0)
-    {
-	int bef = pre[current];
-	sis.push_back(dist[current] - dist[bef]);
-	current = bef;
-    }
-
-    auto it = max_element(sis.begin(), sis.end());
-
-    long long oldv = *it;
-
-    *it = (*it)/2;
-
-    long long old = dist[n];
-
-    dist[n] -= (oldv - *it);
+	while (!frontier.empty()) {
+		Pos curr = frontier.top();
+		frontier.pop();
+		long long curr_cost = min_cost[curr.pos][curr.used];
+		if (curr_cost != curr.cost) { continue; }
+		if (curr.pos == city_num - 1) { break; }
+		for (auto [n, nc] : neighbors[curr.pos]) {
+			// if we haven't used the discount yet, try using it now
+			if (!curr.used) {
+				long long new_cost = curr_cost + nc / 2;
+				if (new_cost < min_cost[n][true]) {
+					min_cost[n][true] = new_cost;
+					frontier.push(Pos{n, true, new_cost});
+				}
+			}
+			// but we can always just try the normal cost route
+			if (curr_cost + nc < min_cost[n][curr.used]) {
+				min_cost[n][curr.used] = curr_cost + nc;
+				frontier.push(Pos{n, curr.used, curr_cost + nc});
+			}
+		}
+	}
+	cout << min_cost[city_num - 1][1];
 }
 
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
-
-    cin >> n >> m;
-
-    for (int i = 0; i < m; i++)
-    {
-	int x, y, z;
-	cin >> x >> y >> z;
-
-	graph[x].push_back({y, z});
-    }
-
-    dijkstra();
-
-    cout << dist[n] << "\n";
-
-    return 0;
-}
-
+// https://usaco.guide/problems/cses-1195-flight-discount/solution
