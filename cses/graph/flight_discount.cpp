@@ -19,7 +19,7 @@ void dijkstra()
     }
 
     dist[1] = 0;
-
+    dist[0] = 0;
     priority_queue<pair<int, int>> q;
 
     q.push({0, 1});
@@ -35,14 +35,40 @@ void dijkstra()
 
 	for (auto i : graph[u])
 	{
-	    long long alt = dist[u] + i.second;
+	    int v = i.first;
+	    long long w = i.second;
+
+	    long long alt = dist[u] + w;
+
 	    if (alt < dist[i.first])
 	    {
-		dist[i.first] = alt;
-		pre[i.first] = u;
+		dist[v] = alt;
+		pre[v] = u;
+		q.push({-dist[v], v});
 	    }
 	}
     }
+
+    vector<int> sis;
+
+    int current = n;
+
+    while(current != 0)
+    {
+	int bef = pre[current];
+	sis.push_back(dist[current] - dist[bef]);
+	current = bef;
+    }
+
+    auto it = max_element(sis.begin(), sis.end());
+
+    long long oldv = *it;
+
+    *it = (*it)/2;
+
+    long long old = dist[n];
+
+    dist[n] -= (oldv - *it);
 }
 
 int main()
@@ -62,7 +88,9 @@ int main()
 	graph[x].push_back({y, z});
     }
 
+    dijkstra();
 
+    cout << dist[n] << "\n";
 
     return 0;
 }
