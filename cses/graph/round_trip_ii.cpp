@@ -2,29 +2,37 @@
 
 using namespace std;
 
-int n, m, start, ed;
+int n, m;
 
 vector<int> graph[100010];
 
-bool vis[100010];
-int heads[100010];
+bool vis[100010], flag[100010];
 
-stack<int> s;
+stack<int> rec;
 
-bool dfs(int src, int parent)
+bool dfs(int u)
 {
-    vis[src] = true;
-    heads[src] = parent;
-    for (auto i : graph[src])
+    vis[u] = true;
+    
+    rec.push(u);
+    
+    flag[u] = true;
+
+    for (auto v : graph[u])
     {
-	if (i == parent) continue;
-	if (vis[i]){ start = i; ed = src; return true;}
-	else
+	if (!vis[v])
+	    if (dfs(v)) return true;
+	if(flag[v])
 	{
-	    if (dfs(i, src)) return true;
+	    rec.push(v);
+	    return true;
 	}
     }
-    return ed;
+
+    rec.pop();
+    flag[u] = false;
+    return false;
+
 }
 
 int main()
@@ -41,31 +49,32 @@ int main()
 	cin >> x >> y;
 	graph[x].push_back(y);
     }
-
-    bool cycle;
-
-    for (int i = 1; i <=n; i++)
+    
+    for (int i = 1; i <= n; i++)
     {
-	if (!vis[i]) cycle = dfs(i, 0);
-	if (cycle) break;
+	if (!vis[i])
+	    if (dfs(i)) break;
     }
 
-    if (!cycle){ cout << "IMPOSSIBLE\n"; return 0;}
-
+    if (rec.empty()) 
+    {
+	cout << "IMPOSSIBLE\n";
+	return 0;
+    }
     vector<int> ans;
-    ans.push_back(ed);
-    while(ed != start)
+
+    int temp = rec.top();
+    while(!rec.empty())
     {
-	ans.push_back(heads[ed]);
-	ed = heads[ed];
+	ans.push_back(rec.top());
+	rec.pop();
+	if (ans.back() == temp && ans.size() != 1)
+	    break;
     }
-    ans.push_back(ans[0]);
-
-    cout << ans.size() << "\n";
-
     reverse(ans.begin(), ans.end());
-
+    cout << ans.size() << "\n";
     for (auto i : ans) cout << i << " ";
+
     return 0;
 }
 
