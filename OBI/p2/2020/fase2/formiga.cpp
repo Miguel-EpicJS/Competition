@@ -2,21 +2,21 @@
 
 using namespace std;
 
-vector<int> sizes(300);
-vector<int> graph[400];
+vector<int> sizes(10000);
+vector<int> graph[10000];
 
-int md = 0;
+int dist[10000];
 
-void dfs(int src, int last, int depth)
+int dfs(int src)
 {
-    if (last <= sizes[src]) return;
-
-    md = max(md, depth);
-
-    for (auto i : graph[src])
+    if (dist[src] != -1) return dist[src];
+    dist[src] = 0;
+    for (auto x : graph[src])
     {
-	dfs(i, sizes[src], depth+1);
+	dist[src] = max(dist[src], dfs(x)+1);
     }
+
+    return dist[src];
 }
 
 int main()
@@ -39,13 +39,16 @@ int main()
     {
 	int x, y;
 	cin >> x >> y;
-	graph[x].push_back(y);
+	if (sizes[x] > sizes[y]) swap(x, y);
+	if (sizes[x] == sizes[y]) continue;
 	graph[y].push_back(x);
     }
 
-    dfs(a, 20000, 0);
+    memset(dist, -1, sizeof(dist));
 
-    cout << md << "\n";
+    dfs(a);
+
+    cout << dist[a] << "\n";
 
     return 0;
 }

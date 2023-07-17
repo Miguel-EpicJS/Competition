@@ -12,13 +12,13 @@ int main()
     
     cin >> x >> y;
 
-    if (x < y) swap(x, y);
+    if (x > y) swap(x, y);
 
     int m;
 
     cin >> m;
 
-    int minS = 1000000;
+    int minS = 1000000000;
     int id = -1;
 
     for (int i = 1; i <= m; i++)
@@ -27,18 +27,19 @@ int main()
 
 	cin >> w >> z;
 	
-	if (w < z) swap(w, z);
+	if (w > z) swap(w, z);
 
 	if (w < x || z < y) continue;
 	if (w == x && z == y)
 	{
 	    id = i;
 	    minS = -1;
+	    break;
 	}
 
-	if (abs(x-w)*y + abs(y-z)*x < minS)
+	if (((w*z)-(x*y)) < minS)
 	{
-	    minS = abs(x-w)*y + abs(y-z)*x;
+	    minS = ((w*z)-(x*y));
 	    id = i;
 	}
     }
