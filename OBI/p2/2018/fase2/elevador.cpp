@@ -27,9 +27,9 @@ int main()
 
     string ans = "S\n";
 
-    for (int i = 0; i < n-1; i++)
+    for (int i = 1; i <= n; i++)
     {
-	if (pesos[i+1] - pesos[i] > 8)
+	if (pesos[i] - pesos[i-1] > 8)
 	    ans = "N\n";
     }
 
