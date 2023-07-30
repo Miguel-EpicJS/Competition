@@ -2,6 +2,8 @@
 
 using namespace std;
 
+int dp[1000001];
+
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -10,7 +12,6 @@ int main()
 
     int t;
 
-    int dp[1000001];
 
     int hig = 0;
 
@@ -24,7 +25,6 @@ int main()
 	cin >> n;
 
 	if (dp[n] != 0){ cout << dp[n] << "\n"; continue;}
-
 	
 
     }
