@@ -2,26 +2,56 @@
 
 using namespace std;
 
+set<int> ns;
+
+int a, b;
+void getdivs(int n)
+{
+
+    for (int i = 1; i*i <= n; i++)
+    {
+	if (n % i == 0)
+	{
+	    ns.insert(i);
+	    ns.insert(n/i);
+	}
+    }
+
+}
+
+
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int a, b;
 
     cin >> a >> b;
+    
+    int c = a+b;
 
-    for (int i = 3; i < 1005; i++)
+    getdivs(c);
+
+    vector<int> ans(ns.begin(), ns.end());
+    int k = ans.size();
+    for (int i = 0; i < k / 2; i++)
     {
-	for (int j = 3; j < 1005; j++)
+	if (ans[i]*ans[k-i-1] - (ans[i]-2)*(ans[k-i-1]-2) == a && (ans[i]-2)*(ans[k-i-1]-2) == b)
 	{
-	    int x = (i-2) * (j-2);
-	    if (i*j == a+b && x == b &&  i*j - x == a)
-	    {
-		cout << i << " " << j << "\n";
-		return 0;
-	    }
+	    cout << min(ans[i], ans[k-i-1]) << " " << max(ans[i], ans[k-i-1]);
+	    return 0;
+
+	}
+    }
+
+    if (k % 2 == 1)
+    {
+	int i = ans[k/2];
+	if (i*i - (i-2)*(i-2) == a && (i-2)*(i-2) == b)
+	{
+	    cout << i << " " << i;
+	    return 0;
 	}
     }
 

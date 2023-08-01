@@ -2,62 +2,46 @@
 
 using namespace std;
 
-struct Node
+struct node
 {
-    int mini, maxi, ans;
+    int mini, maxi, diff;
 };
 
-Node join(Node const& a, Node const& b)
+node arr[100000];
+node tree[400000];
+
+void build(int src, int start, int end)
 {
-    return {min(a.mini, b.mini),
-            max(a.maxi, b.maxi),
-            max({a.ans, b.ans, abs(a.maxi-b.mini), abs(b.maxi-a.mini)})};
-}
-
-const int maxn = 101010;
-
-int v[maxn];
-Node tree[maxn*4];
-
-void build(int no, int l, int r)
-{
-    if (l == r) {
-        tree[no].mini = tree[no].maxi = v[l];
-        return;
+    if (start == end)
+    {
+	tree[src] = arr[start];
     }
+    else
+    {
+	int mid = (start + end) / 2;
+	build(2*src, start, mid);
+	build(2*src+1, mid+1, end);
 
-    int m = (l+r)/2;
+	if (tree[2*src].diff == -1 || tree[2*src+1].diff == -1)
+	{
+	    int diff1 = abs(tree[2*src].mini - tree[2*src+1].maxi);
+	    int diff2 = abs(tree[2*src+1].mini - tree[2*src].maxi);
 
-    build(no*2+1, l, m);
-    build(no*2+2, m+1, r);
+	    tree[src].mini = min({tree[2*src].mini, tree[2*src+1].mini, tree[2*src].maxi, tree[2*src+1].maxi});
+	    tree[src].maxi = max({tree[2*src].mini, tree[2*src+1].mini, tree[2*src].maxi, tree[2*src+1].maxi});
 
-    tree[no] = join(tree[no*2+1], tree[no*2+2]);
-}
 
-Node get(int no, int l, int r, int a, int b)
-{
-    if (a <= l and r <= b) return tree[no];
 
-    int m = (l+r)/2;
-
-    if (b <= m) return get(no*2+1, l, m, a, b);
-    if (a > m) return get(no*2+2, m+1, r, a, b);
-
-    return join(get(no*2+1, l, m, a, b),
-                get(no*2+2, m+1, r, a, b));
-}
-
-void upd(int no, int l, int r, int pos, int val)
-{
-    if (l == r) {
-        tree[no].mini = min(tree[no].mini, val);
-        tree[no].maxi = max(tree[no].maxi, val);
-        return;
+	    if (diff1 > diff2)
+	    {
+		tree[src].diff = diff1;
+	    }
+	    else
+	    {
+		tree[src].diff = diff2;
+	    }
+	}
     }
-    int m = (l+r)/2;
-
-    if (pos <= m) upd(no*2+1, l, m, pos, val);
-    else upd(no*2+2, m+1, r, pos, val);
 }
 
 int main()
@@ -65,28 +49,6 @@ int main()
     int n, q;
     cin >> n >> q;
 
-    for (int i = 1; i <= n; i++)
-        cin >> v[i];
 
-    build(0, 1, n);
 
-    while (q--) {
-        int op;
-        cin >> op;
-
-        if (op == 1) {
-            int val, pos;
-            cin >> val >> pos;
-
-            upd(0, 1, n, pos, val);
-        }
-        else {
-            int l, r;
-            cin >> l >> r;
-
-            cout << get(0, 1, n, l, r).ans << "\n";
-        }
-    }
 }
-
-// https://github.com/pagodepaiva/Noic/blob/main/baldes.cpp

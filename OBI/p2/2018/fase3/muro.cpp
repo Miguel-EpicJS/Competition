@@ -12,27 +12,19 @@ int main()
 
     cin >> n;
 
-    long long arr[10010];
+    long long dp[10001];
 
-    long long mod = 1e9+7;
+    dp[0] = 1;
+    dp[1] = 1;
+    dp[2] = 5;
+    dp[3] = 11;
 
-    arr[0]=1;
-    arr[1]=1;
-    arr[2]=5;
-    arr[3]=11;
-
-    if (n <= 3) 
+    for (int i = 4; i <= n; i++)
     {
-	cout << arr[n] << "\n";
-	return 0;
+	dp[i] = (dp[i-1] + 4*dp[i-2] + 2 * dp[i-3]) % (long long)(1e9+7);
     }
 
-    for(int i = 4; i <= n; i++)
-    {
-	arr[i] = (arr[i-1] + 4*arr[i-2] + 2*arr[i-3]) % mod;
-    }
-
-    cout << arr[n] << "\n";
+    cout << dp[n] << "\n";
 
     return 0;
 }
