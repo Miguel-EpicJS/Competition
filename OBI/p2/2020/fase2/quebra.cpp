@@ -1,15 +1,29 @@
 #include <bits/stdc++.h>
 
-const int INF = 0x3f3f3f3f;
-
 using namespace std;
 
-int n, x, y;
+int n, s1, s2;
 
-int l1[501], l2[501];
+vector<int> l1, l2;
 
 int dp[501][501][501];
 
+int solve(int p, int i, int j)
+{
+
+    if (dp[p][i][j] != 0) return dp[p][i][j];
+    
+    if ( !(s1 - i+1) || !(s2 - j+1) ) return 0;
+    if ( (s1 - i+1) > (n - p+1) || (s2 - j+1) > (n - p+1) ) return dp[p][i][j] = -100000000;
+    if (p == n) return dp[p][i][j] = l1[i-1] * l2[j-1];
+
+    int t1 = l1[i-1] * l2[j-1] + solve(p+1, i+1, j+1);
+    int t2 = solve(p+1, i+1, j);
+    int t3 = solve(p+1, i, j+1);
+
+    return dp[p][i][j] = max({t1, t2, t3});
+
+}
 
 int main()
 {
@@ -18,42 +32,23 @@ int main()
     cout.tie(NULL);
 
     cin >> n;
-
-    cin >> x;
-
-    for (int i = 1; i <= x; i++)
+    cin >> s1;
+    for (int i = 0; i < s1; i++)
     {
-	cin >> l1[i];
+	int x;
+	cin >> x;
+	l1.push_back(x);
     }
-    cin >> y;
-    for (int i = 1; i <= y; i++)
+    cin >> s2;
+    for (int i = 0; i < s2; i++)
     {
-	cin >> l2[i];
-    }   
-
-
-    for (int i = n; i >= 1; i--)
-    {
-	for (int j = x+1; j >= 1; j--)
-	{
-	    for (int k = y+1; k >= 1; k--)
-	    {
-		int xi = n-i+1;
-		int xj = x-j+1;
-		int xk = y-k+1;
-		if (xj > xi || xk > xi)
-		{
-		    dp[i][j][k] = -INF;
-		    continue;
-		}
-		else if (i == n) {dp[i][j][k] = l1[j] * l2[k]; continue;}
-		dp[i][j][k] = max({l1[j]*l2[k] + dp[i+1][j+1][k+1], dp[i+1][j+1][k], dp[i+1][j][k+1]});
-	    }
-	}
+	int x;
+	cin >> x;
+	l2.push_back(x);
     }
 
-    cout << dp[1][1][1] << "\n";
+    cout << solve(1, 1, 1) << "\n";
 
     return 0;
 }
-// based on NOIC
+
