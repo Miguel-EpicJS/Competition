@@ -4,48 +4,47 @@ using namespace std;
 
 int n, s1, s2;
 
-vector<int> l1, l2;
+int l1[502], l2[502];
 
 int dp[501][501][501];
 
 int solve(int p, int i, int j)
 {
 
-    if (dp[p][i][j] != 0) return dp[p][i][j];
-    
-    if ( !(s1 - i+1) || !(s2 - j+1) ) return 0;
-    if ( (s1 - i+1) > (n - p+1) || (s2 - j+1) > (n - p+1) ) return dp[p][i][j] = -100000000;
-    if (p == n) return dp[p][i][j] = l1[i-1] * l2[j-1];
+    if (dp[p][i][j]) return dp[p][i][j];
+   
+    int leftp = n-p+1;
+    int left0 = s1-i+1;
+    int left1 = s2-j+1;
 
-    int t1 = l1[i-1] * l2[j-1] + solve(p+1, i+1, j+1);
+    if ( left0 > leftp || left1 > leftp ) return dp[p][i][j] = -0x3f3f3f3f;
+    if ( !(left0) || !(left1) ) return 0;
+    if (p == n) return dp[p][i][j] = l1[i] * l2[j];
+
+    int t1 = l1[i] * l2[j] + solve(p+1, i+1, j+1);
     int t2 = solve(p+1, i+1, j);
     int t3 = solve(p+1, i, j+1);
 
-    return dp[p][i][j] = max({t1, t2, t3});
+    dp[p][i][j] = max({t1, t2, t3});
 
+    return dp[p][i][j];
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
     cin >> n;
     cin >> s1;
-    for (int i = 0; i < s1; i++)
+    for (int i = 1; i <= s1; i++)
     {
-	int x;
-	cin >> x;
-	l1.push_back(x);
+	cin >> l1[i];
     }
     cin >> s2;
-    for (int i = 0; i < s2; i++)
+    for (int i = 1; i <= s2; i++)
     {
-	int x;
-	cin >> x;
-	l2.push_back(x);
+	cin >> l2[i];
     }
+
+    
 
     cout << solve(1, 1, 1) << "\n";
 
