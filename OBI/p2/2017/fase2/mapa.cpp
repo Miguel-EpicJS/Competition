@@ -2,24 +2,22 @@
 
 using namespace std;
 
-char mapa[110][110];
+char mapa[101][101];
 
-int fl, fc;
+int lx, ly, sx, sy;
 
-void dfs(int i, int j)
+void dfs(int x, int y)
 {
-    if (mapa[i][j] == '.')
-	return;
+    if (mapa[x][y] != 'H' && mapa[x][y] != 'o') return;
 
-    fl = i;
-    fc = j;
-    mapa[i][j] = '.';
+    mapa[x][y] = '.';
 
-    dfs(i+1, j);
-    dfs(i-1, j);
-    dfs(i, j+1);
-    dfs(i, j-1);
-
+    lx = x;
+    ly = y;
+    dfs(x+1, y);
+    dfs(x-1, y);
+    dfs(x, y+1);
+    dfs(x, y-1);
 }
 
 int main()
@@ -28,32 +26,25 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int l, c;
+    int n, m;
 
-    cin >> l >> c;
+    cin >> n >> m;
+    
 
-    int sl, sc;
-
-    for (int i = 0; i < 110; i++)
-	for (int j = 0; j < 110; j++)
-	    mapa[i][j] = '.';
-
-    for (int i = 1; i <= l; i++)
+    for (int i = 1; i <= n; i++)
     {
-	for (int j = 1; j <= c; j++)
+	for (int j = 1; j <= m; j++)
 	{
 	    cin >> mapa[i][j];
 	    if (mapa[i][j] == 'o')
 	    {
-		sl = i;
-		sc = j;
+		sx = i, sy = j;
 	    }
 	}
-    }
+    } 
+    dfs(sx, sy);
 
-    dfs(sl, sc);
-
-    cout << fl << " " << fc << "\n"; 
+    cout << lx << " " << ly << "\n";
 
     return 0;
 }
