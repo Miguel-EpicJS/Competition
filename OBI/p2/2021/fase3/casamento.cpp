@@ -1,74 +1,56 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 int main()
 {
-    string n, m;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
-    cin >> n >> m;
+    deque<char> a, b;
 
-    string zero = "0";
+    string s1, s2;
 
-    while (n.length() < m.length())
+    cin >> s1 >> s2;
+
+    for (auto i : s1)
     {
-	n = zero + n;
+	a.push_back(i);
     }
 
-    while (m.length() < n.length())
+    for (auto i : s2)
     {
-	m = zero + m;
+	b.push_back(i);
     }
 
-    string res1 = "", res2 = "";
 
-    for (int i = 0; i < n.length(); i++)
+    while(a.size() < b.size()) a.push_front(' ');
+    while(b.size() < a.size()) a.push_front(' ');
+
+    string f1="", f2="";
+    
+    while(!a.empty())
     {
-	if (n[i] < m[i])
-	{
-	    res2 += m[i];
-	}
-	else if (m[i] < n[i])
-	{
-	    res1 += n[i];
-	}
-	else if (m[i] == n[i])
-	{
-	    res1 += n[i];
-	    res2 += m[i];
-	}
+	if (a.front() == ' ') f2.push_back(b.front());
+	else if (b.front() == ' ') f1.push_back(a.front());
+	else if (a.front() > b.front()) f1.push_back(a.front());
+	else if (a.front() < b.front()) f2.push_back(b.front());
+	else f1.push_back(a.front()), f2.push_back(b.front());
+	a.pop_front();
+	b.pop_front();
     }
 
-    int r1, r2;
 
-    if (res1.length() == 0)
-    {
-	r1 = -1;
-    }
-    else
-    {
-	r1 = stoi(res1);
-    }
-    if (res2.length() == 0)
-    {
-	r2 = -1;
-    }
-    else
-    {
-	r2 = stoi(res2);
-    }
+    if (f1.size() == 0) f1 = "-1";
+    if (f2.size() == 0) f2 = "-1";
 
-    if (r1 < r2)
-    {
-	cout << r1 << " " << r2;
-    }
-    else 
-    {
-	cout << r2 << " " << r1;
-    }
+    int a1 = stoi(f1), a2 = stoi(f2);
+
+    if (a1 > a2) swap(a1, a2);
+
+    cout << a1 << " " << a2 << "\n";
 
     return 0;
 }
+
