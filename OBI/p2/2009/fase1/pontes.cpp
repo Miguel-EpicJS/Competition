@@ -2,45 +2,36 @@
 
 using namespace std;
 
-vector<pair<int, int>> graph[10001];
-
-const int INF = 100001;
+vector<array<int, 2>> graph[1002];
 
 int n, m;
-
-void bfs(int src)
+void dijkstra()
 {
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    vector<int> dist(1002, 1000000000);
 
-    vector<int> dist(n+10, INF);
+    priority_queue<array<int, 2>> q;
 
-    dist[src] = 0;
+    q.push({0, 0});
 
-    while (!pq.empty())
+    dist[0] = 0;
+
+    while(!q.empty())
     {
-	int u = pq.top().second;
-	pq.pop();
-
-	for (auto i : graph[u])
+	int node = q.top()[1];
+	q.pop();
+	for (auto k : graph[node])
 	{
-	    int v = i.first;
-	    int weight = i.second;
-
-
-	    if (dist[v] > dist[u]+weight)
+	    int vert = k[1];
+	    int d = -k[0];
+	    if (dist[k[1]] > dist[node] + d)
 	    {
-		dist[v] = dist[u] + weight;
-		pq.emplace(dist[v], v);
+		dist[k[1]] = dist[node] + d;
+		q.push(k);
 	    }
 	}
     }
-    
-    cout << "\n";
 
-    for (int i = 0; i < n; i++)
-    {
-	cout << i << ": " << dist[i] << "\n";
-    }
+    cout << dist[n+1] << "\n";
 
 }
 
@@ -50,17 +41,20 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
+
     cin >> n >> m;
 
     for (int i = 0; i < m; i++)
     {
 	int x, y, z;
+
 	cin >> x >> y >> z;
-	graph[x].emplace_back(y, z);
-	graph[y].emplace_back(x, z);
+
+	graph[x].push_back({-z, y});
+	graph[y].push_back({-z, x});
     }
 
-    bfs(0);
+    dijkstra();
 
     return 0;
 }
