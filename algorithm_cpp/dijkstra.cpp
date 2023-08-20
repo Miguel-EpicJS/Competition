@@ -56,7 +56,7 @@ int main()
 
     vector<int> dis, pred;
 
-    dijkstra(0, dis, pred, n+2);
+    dijkstra(1, dis, pred, n+2);
 
     for (auto i : dis)
     {
