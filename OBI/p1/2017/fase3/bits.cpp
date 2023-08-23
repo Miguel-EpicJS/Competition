@@ -1,44 +1,35 @@
-#include <bits/stdc++.h>
+// Guilherme A. Pinto, OBI-2017, bits, DP O(NK)
+
+#include <iostream>
+
+#define MAX 1001
+#define MOD 1000000007
 
 using namespace std;
 
-int dp[1010][1010];
-int mod = 1e9+7;
+int dp[MAX];
+int pot2[MAX];
 
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+int main(){
+  int N,K;
+  
+  cin >> N >> K;
 
-    int n, k;
-
-    cin >> n >> k;
-
-    memset(dp, 0, sizeof(dp));
-
-    dp[0][0] = 1;
-
-    for (int i = 0; i < n; i++)
-    {
-	for (int j = 0; j < k; j++)
-	{
-	    dp[i+1][0] = (dp[i+1][0] + dp[i][j]) % mod; 
-	    dp[0][j] = 0;
-	    dp[i+1][j+1] = ( dp[i+1][j+1] + dp[i][j]) % mod;
-	    dp[0][j] = 0;
-	}
+  pot2[0] = 1;
+  for ( int i = 1; i <= N; i++ )
+    pot2[i] = (pot2[i-1]*2)%MOD;
+  
+  for ( int i = 1; i <= N; i++ ){
+    if ( i < K ) dp[i] = pot2[i];
+    else if ( i == K ) dp[i] = pot2[i]-1;
+    else {
+      dp[i] = 0;
+      for ( int k = 1; k <= K; k++ )
+	dp[i] = (dp[i]+dp[i-k])%MOD;
     }
-
-    int ans = 0;
-
-    for (int i = 0; i <= k; i++)
-    {
-	ans = (dp[n][i] + ans) % mod;
-    }
-
-    cout << ans << "\n";
-
-    return 0;
+  }
+  
+  cout << dp[N] << endl;
+  
+  return 0;
 }
-
