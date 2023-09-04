@@ -2,23 +2,28 @@
 
 using namespace std;
 
-vector<int> arr(100010), bit(100010, 0);
+int bit[100010];
 
-int n, m;
-
-void update(int i, int val)
+int n, q;
+int sum(int k)
 {
-    for (; i <= n; i+=(i&-i))
-	bit[i] += val;
+    int s = 0;
+    while (k >= 1)
+    {
+	s += bit[k];
+	k -= k&-k;
+    }
+
+    return s;
 }
 
-int soma (int i)
+void add(int k, int x)
 {
-    int ans = 0;
-    for (; i> 0; i-=(i&-i))
-	ans += bit[i];
-
-    return ans;
+    while(k <= n)
+    {
+	bit[k] += x;
+	k += k&-k;
+    }
 }
 
 int main()
@@ -28,34 +33,35 @@ int main()
     cout.tie(NULL);
 
 
-    cin >> n >> m;
+    cin >> n >> q;
 
-    for (int i = 0; i < n; i++)
+    memset(bit, 0, sizeof(bit));
+
+    for (int i = 1; i <= n; i++)
     {
-	cin >> arr[i];
-	update(i+1, arr[i]);
+	int x;
+	cin >> x;
+	add(i, x);
     }
 
-
-    for (int i = 0; i < m; i++)
+    for (int i = 0; i < q; i++)
     {
-	int x, y, z;
-	cin >> x >> y;
-	if (x == 1)
+	int x, k, p;
+	cin >> x;
+	if (x == 0)
 	{
-	    cout << soma(y) << "\n";
+	    cin >> k >> p;
+	    int val = sum(k) - sum(k-1);
+	    add(k, p-val);
 	}
 	else
 	{
-	    cin >> z;
-	    update(y, z-arr[y-1]);
-	    arr[y-1] = z;
+	    cin >> k;
+	    cout << sum(k) << "\n";
 	}
     }
 
+
     return 0;
 }
-
-
-
 
