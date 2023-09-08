@@ -1,21 +1,16 @@
 #include <bits/stdc++.h>
+#include <numeric> 
+#define int long long
 
 using namespace std;
-// from https://www.geeksforgeeks.org/cpp-program-for-program-to-find-lcm-of-two-numbers/
 
-long long gcd(long long int a, long long int b)
+int rgsum(int l, int r)
 {
-    if (b == 0)
-        return a;
-   
-    return gcd(b, a % b);
-}
- 
-long long lcm(int a, int b) {
-      return (a / gcd(a, b)) * b;
+    if (l > r) return 0;
+    return (l+r)*(r-1+1) / 2;
 }
 
-int main()
+int32_t main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
@@ -29,34 +24,17 @@ int main()
     {
 	long long a, b, c, n, m, x, y, z, k, w;
 
-	cin >> x >> a >> b;
+	cin >> n >> a >> b;
 
-	if (a == b) 
-	{
-	    cout << "0\n";
-	}
-	else if (a % b == 0)
-	{
-	    c = x / a;
-	    y = x / b;
-	    y -= c;
-	    cout << y*(y+1)/2 * -1 << "\n";
-	}
-	else
-	{
-	    c = lcm(a, b);
+	int red = n / a;
+	int blue = n / b;
+	int purple = n / (lcm(a, b));
+
+	int R = red - purple;
+	int B = blue - purple;
 	
-	    c = x/c;
-	    a = x/a;
-	    b = x/b;
+	cout << ((n+n-R+1)*R/2) - ((B+1)*B/2) << "\n";
 
-
-	
-	    cout << c << " " << a << " " << b << "\n";
-	
-
-	}
-		
     }
 
     return 0;

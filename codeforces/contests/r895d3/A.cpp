@@ -19,25 +19,10 @@ int main()
 	vector<int> arr;
 	cin >> a >> b >> c;
 	if (a < b) swap(a, b);
-	if (a == b)
-	{
-	    cout << "0\n";
-	    continue;
-	}
+    
+	k = a-b;
 
-	int count = 0;
-	while(a-b != 0)
-	{
-	    count ++;
-	
-	    if ((a-b)/2 < c) {break;};
-
-	    a -= c;
-	    b += c;
-
-	}
-
-	cout << count << "\n";
+	cout << ceil(k/(2.0*c)) << "\n";
     }
 
     return 0;
