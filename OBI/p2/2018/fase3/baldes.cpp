@@ -2,53 +2,46 @@
 
 using namespace std;
 
-struct node
+
+int n, m;
+
+int t[200000];
+
+void build()
 {
-    int mini, maxi, diff;
-};
+    for (int i = n - 1; i > 0; --i) t[i] = t[i<<1] + t[i<<i|i];
+}
 
-node arr[100000];
-node tree[400000];
-
-void build(int src, int start, int end)
+void upd(int p, int val)
 {
-    if (start == end)
+    for (t[p+=n] = val; p > 1; p >>= 1) t[p>>1] = t[p] + t[p^1];
+}
+
+int query(int l, int r)
+{
+    int res = 0;
+    for (l += n, r+= n; l < r; l >>= 1, r >>= 1)
     {
-	tree[src] = arr[start];
+	if (l&1) res += t[l++];
+	if (r&1) res += t[--r];
     }
-    else
-    {
-	int mid = (start + end) / 2;
-	build(2*src, start, mid);
-	build(2*src+1, mid+1, end);
-
-	if (tree[2*src].diff == -1 || tree[2*src+1].diff == -1)
-	{
-	    int diff1 = abs(tree[2*src].mini - tree[2*src+1].maxi);
-	    int diff2 = abs(tree[2*src+1].mini - tree[2*src].maxi);
-
-	    tree[src].mini = min({tree[2*src].mini, tree[2*src+1].mini, tree[2*src].maxi, tree[2*src+1].maxi});
-	    tree[src].maxi = max({tree[2*src].mini, tree[2*src+1].mini, tree[2*src].maxi, tree[2*src+1].maxi});
-
-
-
-	    if (diff1 > diff2)
-	    {
-		tree[src].diff = diff1;
-	    }
-	    else
-	    {
-		tree[src].diff = diff2;
-	    }
-	}
-    }
+    return res;
 }
 
 int main()
-{  
-    int n, q;
-    cin >> n >> q;
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
 
+    cin >> n >> m;
 
+    for (int i = 0; i < n; i++)
+    {
+
+    }
+
+    return 0;
 }
+

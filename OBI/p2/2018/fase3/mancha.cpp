@@ -2,6 +2,8 @@
 
 using namespace std;
 
+char arr[1010][1010];
+
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -12,69 +14,60 @@ int main()
 
     cin >> n;
 
-    char arr[n+1][n+1];
-
-    for (int i = 0; i < n; i++)
-	for (int j = 0; j < n; j++)
+    for (int i = 1; i <= n; i++)
+    {
+	for (int j = 1; j <= n; j++)
+	{
 	    cin >> arr[i][j];
-
-    
-    int lastc = 0;
-
+	}
+    }
     bool ok = true;
 
-    for (int i = 0; i < n; i++)
+    int sig = 0;
+    for (int i = 1; i <= n; i++)
     {
-	lastc = 0;
-	for (int j = 0; j < n; j++)
+	sig = 0;
+	for (int j = 1; j <= n; j++)
 	{
-	    if (arr[i][j] == '*' && lastc == 0)
+	    if (arr[i][j] == '*')
 	    {
-		lastc = 1;
+		if (sig == 0) sig = 1;
+		else if (sig == 2)
+		{
+		    cout << "N\n";
+		    return 0;
+		}
 	    }
-	    else if (arr[i][j] == '.' && lastc == 1 )
+	    else
 	    {
-		lastc = 2;
+		if (sig == 1) sig = 2;
 	    }
-	    else if (arr[i][j] == '*' && lastc == 2)
+	}
+    }
+    sig = 0;
+    for (int j = 1; j <= n; j++)
+    {
+	sig = 0;
+	for (int i = 1; i <= n; i++)
+	{
+	    if (arr[i][j] == '*')
 	    {
-		ok = false;
-		i = n+1;
-		break;
+		if (sig == 0) sig = 1;
+		else if (sig == 2)
+		{
+		    cout << "N\n";
+		    return 0;
+		}
+	    }
+	    else
+	    {
+		if (sig == 1) sig = 2;
 	    }
 	}
     }
 
-    if (ok)
-    {
-
-	for (int j = 0; j < n; j++)
-	{
-	    lastc = 0;
-	    for (int i = 0; i < n; i++)
-	    {
-		if (arr[i][j] == '*' && lastc == 0)
-		{
-		    lastc = 1;
-		}
-		else if (arr[i][j] == '.' && lastc == 1 )
-		{
-		    lastc = 2;
-		}
-		else if (arr[i][j] == '*' && lastc == 2)
-		{
-		    ok = false;
-		    j = n+1;
-		    break;
-		}
-	    }
-	}
-
-    }
-
-    if (ok) cout << "S\n";
-    else cout << "N\n";
-
+    cout << "S\n";
+    
     return 0;
 }
 
