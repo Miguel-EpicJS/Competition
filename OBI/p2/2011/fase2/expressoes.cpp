@@ -9,35 +9,52 @@ int main()
     cout.tie(NULL);
 
     int n;
+
     string s;
+
     cin >> n;
 
-    for (int i = 0; i < n; i++)
+    while(n--)
     {
 	cin >> s;
-	stack<char> q;
-	for (auto j : s)
+
+	stack<char> st;
+
+	for (auto i : s)
 	{
-	    if (j == '{' || j == '(' || j == '[')
+	    if (st.empty())
 	    {
-		q.push(j);
+		st.push(i);
 	    }
 	    else
 	    {
-		if (q.size() == 0) q.push(j);
-		char c = q.top();
-		if ((c == '{' && j == '}') || (c == '(' && j == ')') || (c == '[' && j == ']'))
+		if (st.top() == '{' && i == '}')
 		{
-		    q.pop();
+		    st.pop();
+		}
+		else if (st.top() == '[' && i == ']')
+		{
+		    st.pop();
+		}
+		else if (st.top() == '(' && i == ')')
+		{
+		    st.pop();
 		}
 		else
 		{
-		    q.push(j);
+		    st.push(i);
 		}
 	    }
 	}
-	if (q.size() > 0) cout << "N\n";
-	else cout << "S\n";
+
+	if (st.empty())
+	{
+	    cout << "S\n";
+	}
+	else
+	{
+	    cout << "N\n";
+	}
     }
 
     return 0;
