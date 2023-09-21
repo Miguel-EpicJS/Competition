@@ -8,49 +8,32 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
-    deque<char> a, b;
-
     string s1, s2;
 
     cin >> s1 >> s2;
 
-    for (auto i : s1)
+    reverse(s1.begin(), s1.end());
+    reverse(s2.begin(), s2.end());
+
+    while(s1.size() < s2.size()) s1+='0';
+    while(s2.size() < s1.size()) s2+='0';
+
+    reverse(s1.begin(), s1.end());
+    reverse(s2.begin(), s2.end());
+
+    string ans1 = "", ans2 = "";
+
+    for (int i = 0; i < s1.size(); i++)
     {
-	a.push_back(i);
+	if (s1[i] == s2[i]) ans1+=s1[i], ans2+=s2[i];
+	else if (s1[i] > s2[i]) ans1+=s1[i];
+	else ans2+=s2[i];
     }
 
-    for (auto i : s2)
-    {
-	b.push_back(i);
-    }
+    if (ans1 > ans2) swap(ans1, ans2);
 
-
-    while(a.size() < b.size()) a.push_front(' ');
-    while(b.size() < a.size()) a.push_front(' ');
-
-    string f1="", f2="";
-    
-    while(!a.empty())
-    {
-	if (a.front() == ' ') f2.push_back(b.front());
-	else if (b.front() == ' ') f1.push_back(a.front());
-	else if (a.front() > b.front()) f1.push_back(a.front());
-	else if (a.front() < b.front()) f2.push_back(b.front());
-	else f1.push_back(a.front()), f2.push_back(b.front());
-	a.pop_front();
-	b.pop_front();
-    }
-
-
-    if (f1.size() == 0) f1 = "-1";
-    if (f2.size() == 0) f2 = "-1";
-
-    int a1 = stoi(f1), a2 = stoi(f2);
-
-    if (a1 > a2) swap(a1, a2);
-
-    cout << a1 << " " << a2 << "\n";
-
+    cout << ans1 << " " << ans2 << "\n";
+	
     return 0;
 }
 
