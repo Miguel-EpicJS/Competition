@@ -1,27 +1,71 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
-#define LSOne(S) ((S) & -(S)) // the key operation
-typedef vector<int> vi;
-class FenwickTree { // index 0 is not used
-    private:
-	vi ft;
-    public:
-	FenwickTree(int m) { ft.assign(m+1, 0); } // create empty FT
-	
-	int rsq(int j) { // returns RSQ(1, j)
-	    int sum = 0;
-	    for (; j; j -= LSOne(j))
-		sum += ft[j];
-	    return sum;
-	}
+int bit[100000], arr[100000];
 
-	int rsq(int i, int j) { return rsq(j) - rsq(i-1); } // inc/exclusion
-	// updates value of the i-th element by v (v can be +ve/inc or -ve/dec)
-	void update(int i, int v) {
-	    for (; i < (int)ft.size(); i += LSOne(i))
-		ft[i] += v;
-	}
-};
+int n, q;
 
-// CP 4 Handbook
+void updt(int x, int val)
+{
+    for (; x <= n; x+=(x&-x))
+    {
+	bit[x] += val;
+    }
+}
+
+int sum(int x)
+{
+    int val = 0;
+
+    for (; x > 0; x -= (x&-x))
+    {
+	val += bit[x];
+    }
+
+    return val;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    memset(bit, 0, sizeof(bit));
+
+    cin >> n >> q;
+
+    for (int i = 1; i <= n; i++)
+    {
+	int x;
+	cin >> x;
+    
+	updt(i, x);
+    }
+
+    for (int i = 0; i < q; i++)
+    {
+	int x;
+
+	cin >> x;
+
+	if (x == 1)
+	{
+	    int y;
+	    cin >> y;
+	    cout << sum(y) << "\n";
+	}
+	else
+	{
+	    int y, z;
+
+	    cin >> y >> z;
+
+	    updt(y, z-(sum(y)-sum(y-1)));
+	}
+    }
+
+    return 0;
+}
+
