@@ -1,79 +1,53 @@
-#include <iostream>
-
-#include <queue>
-#include <vector>
-#include <utility>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-const int INF = 0xf3f3f3;
-const int null = -127;
+const int inf = 1e9+10;
 
-const int V = 6;
+int n, m, dist[100000];
 
-void dijkstra(int graph[V][V], int source)
+vector<array<int, 2>> g[100000];
+
+bool vis[100000];
+
+void dijkstra(int src)
 {
-    int dist[V], prev[V];
+    for (int i = 0; i <= n; i++) dist[i] = inf;
 
-    dist[source] = 0;
+    dist[src] = 0;
 
-    priority_queue<pair<int, int>> Q;
+    priority_queue<array<int, 2>, vector<array<int, 2>>, greater<array<int, 2>>> pq;
 
-    for (int vertex = 0; vertex < V; vertex++)
+    pq.push({0, src});
+
+    while(!pq.empty())
     {
-	if (vertex != source)
+	int u = pq.top()[1];
+	pq.pop();
+
+	if (vis[u]) continue;
+
+	vis[u] = 1;
+	for (auto e : g[u])
 	{
-	    dist[vertex] = INF;
-	    prev[vertex] = null;
-	}
-
-	Q.push(make_pair(-1 * dist[vertex], vertex));
-    }
-
-    while (!Q.empty())
-    {
-	pair<int, int> u = Q.top();
-	Q.pop();
-
-	for( int neighbor = 0; neighbor < V; neighbor++ )
-	{
-    
-	    if (graph[u.second][neighbor] == -1)
-		continue;
-
-	    int alt = dist[u.second] + graph[u.second][neighbor];
-
-	    if (alt < dist[neighbor])
+	    int v = e[0];
+	    int w = e[1];
+	    if (dist[v] > dist[u] + w)
 	    {
-		dist[neighbor] = alt;
-		prev[neighbor] = u.second;
-		Q.push(make_pair(alt, neighbor));
+		dist[v] = dist[u] + w;
+		pq.push({dist[v], v});
 	    }
 	}
-
-    }
-
-    for(int i = 0; i < V; i++)
-    {
-	cout << dist[i] << ", ";
     }
 
 }
 
 int main()
 {
-    
-    int graph[V][V] = {
-      // 1  2  3  4  5    6
-	{0, 2, 4, 8, 16, -1}, // 1
-	{2, 0, -1, -1, 5, -1}, // 2
-	{4, -1, 0, -1, -1, 32}, // 3
-	{8, -1, -1, 0, -1, -1}, // 4
-	{16, 5, -1, -1, 0, -1}, // 5
-	{-1, -1, 32, -1, -1, 0}, // 6
-    };
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
-    dijkstra(graph, 0);
-
-    return 0;                           
+    return 0;
 }
+
