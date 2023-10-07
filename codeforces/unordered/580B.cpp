@@ -34,7 +34,6 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
-
 	if (friends[i].first-friends[p1].first < d )
 	{
 	    curr+=friends[i].second;
