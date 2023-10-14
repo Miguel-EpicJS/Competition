@@ -19,12 +19,12 @@ int main()
 	cin >> n;
 
 	vector<int> arr;
-
 	for (int i = 0; i < n; i++)
 	{
 	    cin >> x;
 	    arr.push_back(x);
 	}
+
     }
 
     return 0;
