@@ -3,86 +3,74 @@
 using namespace std;
 
 vector<int> graph[510];
-vector<bool> gerentes;
-vector<int> ages(510);
+vector<int> ages(510), tre(510);
 
-int n, m, l;
+int n, m, i;
 
+int dfs(int src)
+{
+    int node = ages[src];
+
+    for (auto i : graph[src])
+    {
+	node = min(node, dfs(tre[i]));
+    }
+
+    return node;
+}
 
 int main()
 {
+
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
 
-    cin >> n >> m >> l;
+    cin >> n >> m >> i;
 
-
-    gerentes.assign(n+5, true);
-
-    for (int i = 0; i < n; i++)
+    for (int j = 1; j <= n; j++)
     {
-	cin >> ages[i];
+	cin >> ages[j];
+	tre[j] = j;
     }
 
-    for (int i = 0; i < m; i++)
+    for (int j = 0; j < m; j++)
     {
 	int x, y;
 	cin >> x >> y;
-	graph[x].push_back(y);
-	gerentes[y] = false;
-    }
-    
-    for (int i = 1; i <= n; i++)
-    {
-	for (int j = 1; j <= n; j++)
-	{
-	    cout << graph[i][j] << " ";
-	}
-	cout << "\n\n";
+	graph[y].push_back(x);
     }
 
-    for (int i = 0; i < l; i++)
+    for (int j = 0; j < i; j++)
     {
-	char c;
-	cin >> c;
-	if (c == 'T')
+	char x;
+
+	cin >> x;
+
+	if (x == 'P')
 	{
-	    int x, y;
-	    cin >> x >> y;
-
-	    int c = gerentes[x];
-	    gerentes[x] = gerentes[y];
-	    gerentes[y] = c;
-
-	    c = ages[x];
-	    ages[x] = ages[y];
-	    ages[y] = c;
+	    int y;
+	    cin >> y;
+	    if (graph[tre[y]].size() == 0) cout << "*\n";
+	    else cout << dfs(tre[y]) << "\n";
 	}
 	else
 	{
-	    int x;
-	    cin >> x;
-	    if (gerentes[x])
-	    {
-		cout << "*\n";
-	    }
-	    else
-	    {
+	    int y, z;
+	    cin >> y >> z;
+	    int t = ages[y];
+	    ages[y] = ages[z];
+	    ages[z] = t;
+	    t = tre[y];
+	    tre[y] = tre[z];
+	    tre[z] = t;
 
-	    }
+
+
 	}
     }
 
-    for (int i = 1; i <= n; i++)
-    {
-	for (int j = 1; j <= n; j++)
-	{
-	    cout << graph[i][j] << " ";
-	}
-	cout << "\n";
-    }
 
     return 0;
 }
