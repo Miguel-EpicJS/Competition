@@ -18,90 +18,26 @@ int main()
 
 	cin >> n;
 
-	vector<long long> arr;
-
-	ss[0] = 0;
-	ss[1] = 0;
-
+	vector<long long> arr, prefix(n, 0);
 	for (int i = 0; i < n; i++)
 	{
 	    cin >> x;
-
-	    ss[i%2] += x;
-
+	    if (i%2 == 1) x = -x;
 	    arr.push_back(x);
 	}
 
-	int i = 0, j = n;
+	prefix[0] = arr[0];
 
-	bool ok = false;
-
-	while(i < j)
+	for (int i = 1; i < n; i++)
 	{
-	    if (ss[0] == ss[1]) 
-	    {
-		cout << "YES\n";
-		ok = true;
-		break;
-	    }
-
-	    if (ss[0] > ss[1] && i%2 != j%2)
-	    {
-		if (i%2 == 0)
-		{
-		    ss[0] -= arr[i];
-		    i++;
-		}
-		else
-		{
-		    ss[0] -= arr[j];
-		    j--;
-		}
-	    }
-	    if (ss[0] < ss[1] && i%2 != j%2)
-	    {
-		if (i%2 == 1)
-		{
-		    ss[1] -= arr[i];
-		    i++;
-		}
-		else
-		{
-		    ss[1] -= arr[j];
-		    j--;
-		}
-	    }
-
-	    if (ss[0] > ss[1] && i%2 == j%2)
-	    {
-		if (i%2 == 0)
-		{
-		    if (abs(ss[1] - (ss[0] - arr[i])) < abs(ss[1] - (ss[0] - arr[i])))
-		    ss[0] -= arr[i];
-		    i++;
-		}
-		else
-		{
-		    ss[0] -= arr[j];
-		    j--;
-		}
-	    }
-
-	    if (ss[0] < ss[1] && i%2 == j%2)
-	    {
-		if (i%2 == 1)
-		{
-		    ss[1] -= arr[i];
-		    i++;
-		}
-		else
-		{
-		    ss[1] -= arr[j];
-		    j--;
-		}
-	    }
+	    prefix[i] += prefix[i-1] + arr[i];
 	}
-	
+	prefix.push_back(0);
+
+	set<long long> vals(prefix.begin(), prefix.end());
+
+	if(vals.size() == prefix.size()) cout << "NO\n";
+	else cout << "YES\n";
 
     }
 
